@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="mb-8">
+        <p class="text-brown-800 text-xs font-bold tracking-widest uppercase mb-1">Konfigurasi Sistem</p>
+        <h2 class="text-3xl font-luxury font-bold text-brown-900">Pengaturan Aplikasi</h2>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        
+        <div class="col-span-1">
+            <div class="bg-white rounded-2xl shadow-glass p-6 text-center border border-white relative overflow-hidden">
+                <div class="h-20 bg-luxury-dark absolute top-0 left-0 w-full"></div>
+                <div class="relative z-10 mt-4">
+                    <img src="https://ui-avatars.com/api/?name=Admin+Wayang&background=D4AF37&color=fff&size=128" 
+                         class="w-24 h-24 rounded-full border-4 border-white shadow-lg mx-auto">
+                    <h3 class="mt-4 font-luxury font-bold text-xl text-brown-900">Ki Admin</h3>
+                    <p class="text-xs text-gold-600 uppercase font-bold tracking-widest">Super Administrator</p>
+                </div>
+                <div class="mt-6 pt-6 border-t border-gray-100">
+                    <button class="w-full py-2 px-4 border border-gold-400/50 text-gold-700 font-bold rounded-xl text-sm hover:bg-gold-50 transition">
+                        Ubah Foto Profil
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-span-2">
+            <div class="bg-white rounded-2xl shadow-glass border border-white overflow-hidden">
+                <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                    <h3 class="font-bold text-brown-900">Informasi Umum</h3>
+                    <button class="text-sm text-gold-600 font-bold hover:underline">Reset</button>
+                </div>
+                
+                <div class="p-6 space-y-6">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Nama Situs / Aplikasi</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
+                            </span>
+                            <input type="text" value="{{ settings.site_title }}" class="w-full pl-10 pr-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-bold text-brown-800">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Email Administrator</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            </span>
+                            <input type="email" value="{{ settings.admin_email }}" class="w-full pl-10 pr-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-medium">
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-xl border border-yellow-100">
+                        <div>
+                            <h4 class="font-bold text-brown-900 text-sm">Mode Pemeliharaan (Maintenance)</h4>
+                            <p class="text-xs text-gray-500 mt-1">Situs tidak dapat diakses publik jika aktif.</p>
+                        </div>
+                        <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                            <input type="checkbox" name="maintenance" id="toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300"/>
+                            <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-gray-100">
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Keamanan</label>
+                        <button class="flex items-center gap-2 text-sm font-bold text-brown-800 bg-gray-100 px-4 py-3 rounded-xl hover:bg-gray-200 transition w-full justify-center">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                            Ganti Password Login
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-6 bg-gray-50 flex justify-end">
+                    <button class="px-8 py-3 rounded-xl bg-gold-gradient text-white font-bold shadow-lg hover:shadow-gold-glow hover:-translate-y-1 transition transform">
+                        Simpan Perubahan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom Toggle Switch CSS */
+    .toggle-checkbox:checked {
+        right: 0;
+        border-color: #D4AF37;
+    }
+    .toggle-checkbox:checked + .toggle-label {
+        background-color: #D4AF37;
+    }
+    .toggle-label {
+        width: 3rem;
+    }
+    .toggle-checkbox {
+        right: 1.5rem; /* Posisi awal */
+        transition: all 0.3s;
+    }
+</style>
+{% endblock %}

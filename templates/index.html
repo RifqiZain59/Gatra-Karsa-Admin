@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="mb-8 flex justify-between items-end">
+    <div>
+        <p class="text-brown-800 text-sm font-bold tracking-widest uppercase mb-1">Overview</p>
+        <h2 class="text-4xl font-luxury font-bold text-brown-900">
+            Monitor <span class="text-gradient-gold">Database</span>
+        </h2>
+        <p class="text-gray-500 mt-2 text-sm">Ringkasan seluruh data budaya (Read-Only).</p>
+    </div>
+    
+    <div class="hidden md:flex space-x-4">
+        <div class="px-5 py-2 bg-white rounded-lg shadow-sm border border-gold-100 flex items-center">
+            <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+            <span class="text-xs font-bold text-brown-800">System Online</span>
+        </div>
+    </div>
+</div>
+
+<div class="bg-white/60 backdrop-blur-md rounded-3xl p-6 shadow-glass border border-white w-full">
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead>
+                <tr class="text-left text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-200">
+                    <th class="pb-4 pl-4">Item & Visual</th>
+                    <th class="pb-4">Kategori</th>
+                    <th class="pb-4">Status</th>
+                    <th class="pb-4 text-right pr-4">Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="text-sm">
+                {% for content in contents %}
+                <tr class="group hover:bg-white transition-all duration-300 rounded-xl border-b border-transparent hover:shadow-lg">
+                    
+                    <td class="py-4 pl-4 rounded-l-xl">
+                        <div class="flex items-center">
+                            <div class="h-14 w-14 rounded-xl bg-gray-200 overflow-hidden mr-4 shadow-md border border-white flex-shrink-0">
+                                {% if content.image_url %}
+                                    <img src="{{ content.image_url }}" alt="Img" class="w-full h-full object-cover">
+                                {% else %}
+                                    <div class="w-full h-full bg-brown-100 flex items-center justify-center text-brown-400">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div>
+                                <p class="font-bold text-brown-900 text-base line-clamp-1">{{ content.title }}</p>
+                                <p class="text-xs text-gray-500 font-medium">{{ content.subtitle }}</p>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="py-4">
+                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide border 
+                            {% if content.category == 'Kisah' %} bg-brown-50 text-brown-700 border-brown-200
+                            {% elif content.category == 'Museum' %} bg-purple-50 text-purple-700 border-purple-100
+                            {% elif content.category == 'Event' %} bg-blue-50 text-blue-700 border-blue-100
+                            {% else %} bg-gold-100 text-yellow-800 border-gold-200 {% endif %}">
+                            {{ content.category }}
+                        </span>
+                    </td>
+
+                    <td class="py-4">
+                        {% if content.status == 'Publish' %}
+                            <div class="flex items-center text-green-600 font-bold text-xs">
+                                <span class="relative flex h-2 w-2 mr-2">
+                                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                  <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                </span>
+                                Live
+                            </div>
+                        {% else %}
+                            <div class="flex items-center text-gray-400 font-bold text-xs">
+                                <span class="w-2 h-2 bg-gray-400 rounded-full mr-2"></span>
+                                Draft
+                            </div>
+                        {% endif %}
+                    </td>
+
+                    <td class="py-4 pr-4 text-right rounded-r-xl">
+                        <a href="/delete/{{ content.id }}" onclick="return confirm('Hapus permanen data ini?')" 
+                           class="w-8 h-8 rounded-full bg-gray-50 hover:bg-red-50 text-gray-400 hover:text-red-500 flex items-center justify-center transition ml-auto" title="Hapus">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" class="text-center py-12">
+                        <div class="flex flex-col items-center justify-center text-gray-400">
+                            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-3">
+                                <svg class="w-8 h-8 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            </div>
+                            <span class="font-luxury text-lg text-brown-900">Database Kosong</span>
+                            <span class="text-xs mt-1">Gunakan menu di samping untuk mulai mengisi konten.</span>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
