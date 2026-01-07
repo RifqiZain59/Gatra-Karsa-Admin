@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{# --- KONFIGURASI HALAMAN --- #}
 {% set kategori_halaman = 'Kisah' %} 
 {% set judul_halaman = 'Hikayat & Kisah' %}
 
@@ -8,7 +9,7 @@
     showModal: false, 
     isEdit: false, 
     imagePreview: null,
-    form: { id: '', title: '', subtitle: '', category: '', description: '', status: 'Publish', currentImage: '' } 
+    form: { id: '', title: '', subtitle: '', category: 'Kisah', description: '', status: 'Publish', currentImage: '', publish_date: '' } 
 }">
 
     <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
@@ -17,7 +18,7 @@
             <h2 class="text-3xl font-luxury font-bold text-brown-900">{{ judul_halaman }}</h2>
         </div>
         
-        <button @click="showModal = true; isEdit = false; imagePreview = null; form = { id:'', title:'', subtitle:'', category:'', description:'', status:'Publish', currentImage:'' }" 
+        <button @click="showModal = true; isEdit = false; imagePreview = null; form = { id:'', title:'', subtitle:'', category:'Kisah', description:'', status:'Publish', currentImage:'', publish_date:'' }" 
             class="px-6 py-2 bg-white text-brown-800 border border-gold-400/30 rounded-full text-sm font-bold shadow-sm hover:bg-gold-100 transition flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
             Tambah {{ kategori_halaman }}
@@ -35,14 +36,31 @@
             </div>
             <div class="p-5 flex-1 flex flex-col">
                 <div class="mb-3">
-                    <p class="text-xs text-gold-600 font-bold uppercase mb-1 truncate">{{ content.subtitle }}</p>
-                    <h3 class="text-lg font-bold text-brown-900 leading-tight">{{ content.title }}</h3>
+                    <div class="flex justify-between items-start mb-1">
+                        <div class="flex items-center gap-1 text-gold-600">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            <p class="text-xs font-bold uppercase truncate max-w-[100px]">{{ content.subtitle }}</p>
+                        </div>
+                        
+                        {% if content.publish_date %}
+                        <div class="flex items-center gap-1 text-gray-400 text-[10px]">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            <span>{{ content.publish_date }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <h3 class="text-lg font-bold text-brown-900 leading-tight line-clamp-2">{{ content.title }}</h3>
                 </div>
-                <p class="text-sm text-gray-500 line-clamp-2 mb-4 flex-1">{{ content.description }}</p>
+                <p class="text-sm text-gray-500 line-clamp-3 mb-4 flex-1">{{ content.description }}</p>
+                
                 <div class="pt-4 border-t border-gray-100 flex justify-between items-center">
-                    <button @click="showModal = true; isEdit = true; imagePreview = '{{ content.image_url }}'; form = { id: '{{ content.id }}', title: `{{ content.title }}`, subtitle: `{{ content.subtitle }}`, category: '{{ content.category }}', description: `{{ content.description }}`, status: '{{ content.status }}', currentImage: '{{ content.image_url }}' }"
-                        class="text-xs font-bold text-gold-600 hover:text-brown-800 uppercase tracking-wider">Edit</button>
-                    <a href="/delete/{{ content.id }}" onclick="return confirm('Hapus data ini?')" class="text-gray-400 hover:text-red-500 transition p-2">
+                    <button @click="showModal = true; isEdit = true; imagePreview = '{{ content.image_url }}'; form = { id: '{{ content.id }}', title: `{{ content.title }}`, subtitle: `{{ content.subtitle }}`, category: '{{ content.category }}', description: `{{ content.description }}`, status: '{{ content.status }}', currentImage: '{{ content.image_url }}', publish_date: '{{ content.publish_date }}' }"
+                        class="text-xs font-bold text-gold-600 hover:text-brown-800 uppercase tracking-wider flex items-center gap-1">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        Edit
+                    </button>
+                    <a href="/delete/{{ content.id }}" onclick="return confirm('Hapus kisah ini?')" class="text-gray-400 hover:text-red-500 transition p-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                     </a>
                 </div>
@@ -50,8 +68,11 @@
         </div>
         {% else %}
         <div class="col-span-full py-20 text-center">
+            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-3 mx-auto">
+                <svg class="w-8 h-8 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+            </div>
             <h3 class="font-luxury text-xl text-brown-900">Koleksi Kosong</h3>
-            <p class="text-gray-500 mt-2">Belum ada data {{ kategori_halaman }}.</p>
+            <p class="text-gray-500 mt-2">Belum ada data {{ kategori_halaman }} yang ditambahkan.</p>
         </div>
         {% endfor %}
     </div>
@@ -64,7 +85,7 @@
              <div class="h-2 bg-gold-gradient w-full"></div>
              <div class="p-8">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-luxury font-bold text-brown-900"><span x-text="isEdit ? 'Edit Data' : 'Tambah Baru'"></span></h3>
+                    <h3 class="text-2xl font-luxury font-bold text-brown-900"><span x-text="isEdit ? 'Edit Kisah' : 'Tambah Kisah'"></span></h3>
                     <button @click="showModal = false" class="text-gray-400 hover:text-red-500 transition">✕</button>
                 </div>
 
@@ -72,13 +93,14 @@
                     <input type="hidden" name="id" x-model="form.id">
 
                     <div class="mb-4">
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Foto / Gambar</label>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Sampul Kisah</label>
                         <div class="flex items-start gap-4">
-                            <div class="w-24 h-24 rounded-xl bg-gray-100 border border-dashed border-gray-300 flex items-center justify-center overflow-hidden flex-shrink-0">
+                            <div class="w-24 h-24 rounded-xl bg-gray-100 border border-dashed border-gray-300 flex items-center justify-center overflow-hidden flex-shrink-0 relative group">
                                 <template x-if="imagePreview"><img :src="imagePreview" class="w-full h-full object-cover"></template>
                                 <template x-if="!imagePreview"><svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></template>
                             </div>
                             <div class="flex-1">
+                                <p class="text-xs text-gray-400 mb-2">Format: JPG, PNG. Max 1MB.</p>
                                 <input type="file" name="image" accept="image/*" @change="imagePreview = URL.createObjectURL($event.target.files[0])" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-bold file:bg-gold-100 file:text-gold-700 hover:file:bg-gold-200 cursor-pointer" />
                             </div>
                         </div>
@@ -86,34 +108,42 @@
 
                     <div class="grid grid-cols-2 gap-4">
                         <div class="col-span-2">
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Judul Utama</label>
-                            <input type="text" name="title" x-model="form.title" required class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-bold text-brown-900" placeholder="Judul">
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Judul Kisah</label>
+                            <input type="text" name="title" x-model="form.title" required class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-bold text-brown-900" placeholder="Contoh: Mahabharata">
                         </div>
                         
                         <div>
                             <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Kategori</label>
-                            <input type="text" name="category" x-model="form.category" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-bold text-brown-900" placeholder="Masukkan Kategori">
+                            <input type="text" name="category" x-model="form.category" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-bold text-brown-900" placeholder="Kisah / Legenda">
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Subtitle</label>
-                            <input type="text" name="subtitle" x-model="form.subtitle" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-medium" placeholder="Tgl / Asal">
+                            <input type="text" name="subtitle" x-model="form.subtitle" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-medium" placeholder="Jawa / India">
+                        </div>
+
+                        <div class="col-span-2">
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tanggal Publish</label>
+                            <input type="date" name="publish_date" x-model="form.publish_date" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-medium">
                         </div>
                     </div>
+
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Deskripsi</label>
-                        <textarea name="description" x-model="form.description" rows="3" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-medium"></textarea>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Isi Cerita / Sinopsis</label>
+                        <textarea name="description" x-model="form.description" rows="5" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-medium" placeholder="Tuliskan ringkasan cerita di sini..."></textarea>
                     </div>
+
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Status</label>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Status Publikasi</label>
                         <div class="flex space-x-4">
-                            <label class="flex items-center cursor-pointer"><input type="radio" name="status" value="Publish" x-model="form.status" class="text-gold-500 focus:ring-gold-400"><span class="ml-2 text-sm font-bold text-gray-600">Publish</span></label>
-                            <label class="flex items-center cursor-pointer"><input type="radio" name="status" value="Draft" x-model="form.status" class="text-gray-400 focus:ring-gray-400"><span class="ml-2 text-sm font-bold text-gray-400">Draft</span></label>
+                            <label class="flex items-center cursor-pointer"><input type="radio" name="status" value="Publish" x-model="form.status" class="text-gold-500 focus:ring-gold-400"><span class="ml-2 text-sm font-bold text-gray-600">Tampilkan</span></label>
+                            <label class="flex items-center cursor-pointer"><input type="radio" name="status" value="Draft" x-model="form.status" class="text-gray-400 focus:ring-gray-400"><span class="ml-2 text-sm font-bold text-gray-400">Arsipkan</span></label>
                         </div>
                     </div>
+
                     <div class="pt-4 flex justify-end gap-3">
                         <button type="button" @click="showModal = false" class="px-6 py-3 rounded-xl text-gray-500 font-bold hover:bg-gray-100 transition">Batal</button>
-                        <button type="submit" class="px-8 py-3 rounded-xl bg-gold-gradient text-white font-bold shadow-lg hover:shadow-gold-glow hover:-translate-y-1 transition transform">Simpan</button>
+                        <button type="submit" class="px-8 py-3 rounded-xl bg-gold-gradient text-white font-bold shadow-lg hover:shadow-gold-glow hover:-translate-y-1 transition transform">Simpan Kisah</button>
                     </div>
                 </form>
              </div>

@@ -29,56 +29,61 @@
         <div class="col-span-2">
             <div class="bg-white rounded-2xl shadow-glass border border-white overflow-hidden">
                 <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                    <h3 class="font-bold text-brown-900">Informasi Umum</h3>
-                    <button class="text-sm text-gold-600 font-bold hover:underline">Reset</button>
+                    <h3 class="font-bold text-brown-900 text-lg">Edit Profil & Sistem</h3>
                 </div>
                 
-                <div class="p-6 space-y-6">
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Nama Situs / Aplikasi</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
-                            </span>
-                            <input type="text" value="{{ settings.site_title }}" class="w-full pl-10 pr-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-bold text-brown-800">
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Email Administrator</label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                            </span>
-                            <input type="email" value="{{ settings.admin_email }}" class="w-full pl-10 pr-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-medium">
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-between p-4 bg-yellow-50 rounded-xl border border-yellow-100">
+                <form action="#" method="POST"> 
+                    <div class="p-6 space-y-6">
+                        
                         <div>
-                            <h4 class="font-bold text-brown-900 text-sm">Mode Pemeliharaan (Maintenance)</h4>
-                            <p class="text-xs text-gray-500 mt-1">Situs tidak dapat diakses publik jika aktif.</p>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Email Administrator</label>
+                            <div class="relative group">
+                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400 group-focus-within:text-gold-500 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                </span>
+                                <input type="email" name="admin_email" value="{{ settings.admin_email }}" class="w-full pl-11 pr-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-medium text-brown-800 placeholder-gray-400" placeholder="admin@contoh.com">
+                            </div>
                         </div>
-                        <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
-                            <input type="checkbox" name="maintenance" id="toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300"/>
-                            <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+
+                        <div x-data="{ showPass: false }">
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Password Baru (Opsional)</label>
+                            <div class="relative group">
+                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400 group-focus-within:text-gold-500 transition-colors">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                </span>
+                                <input :type="showPass ? 'text' : 'password'" name="new_password" class="w-full pl-11 pr-12 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-medium text-brown-800 placeholder-gray-400" placeholder="Kosongkan jika tidak ingin mengubah">
+                                
+                                <button type="button" @click="showPass = !showPass" class="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gold-600 transition">
+                                    <svg x-show="!showPass" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                    <svg x-show="showPass" style="display:none;" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a10.059 10.059 0 013.999-5.125m3.741-1.653A10.45 10.45 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.059 10.059 0 01-3.2 4.675M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18"></path></svg>
+                                </button>
+                            </div>
+                            <p class="text-[10px] text-gray-400 mt-1 ml-1">Minimal 8 karakter.</p>
                         </div>
+
+                        <div class="flex items-center justify-between p-4 bg-yellow-50/50 rounded-xl border border-yellow-100">
+                            <div>
+                                <h4 class="font-bold text-brown-900 text-sm flex items-center gap-2">
+                                    <svg class="w-4 h-4 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                    Mode Pemeliharaan
+                                </h4>
+                                <p class="text-xs text-gray-500 mt-1">Situs tidak dapat diakses publik jika aktif.</p>
+                            </div>
+                            <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                                <input type="checkbox" name="maintenance" id="toggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300"/>
+                                <label for="toggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                            </div>
+                        </div>
+
                     </div>
 
-                    <div class="pt-4 border-t border-gray-100">
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Keamanan</label>
-                        <button class="flex items-center gap-2 text-sm font-bold text-brown-800 bg-gray-100 px-4 py-3 rounded-xl hover:bg-gray-200 transition w-full justify-center">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                            Ganti Password Login
+                    <div class="p-6 bg-gray-50 flex justify-end items-center gap-3 border-t border-gray-100">
+                        <button type="button" class="text-gray-400 font-bold text-sm hover:text-red-500 transition">Batal</button>
+                        <button type="submit" class="px-8 py-3 rounded-xl bg-gold-gradient text-white font-bold shadow-lg hover:shadow-gold-glow hover:-translate-y-1 transition transform">
+                            Simpan Perubahan
                         </button>
                     </div>
-                </div>
-
-                <div class="p-6 bg-gray-50 flex justify-end">
-                    <button class="px-8 py-3 rounded-xl bg-gold-gradient text-white font-bold shadow-lg hover:shadow-gold-glow hover:-translate-y-1 transition transform">
-                        Simpan Perubahan
-                    </button>
-                </div>
+                </form>
             </div>
         </div>
     </div>

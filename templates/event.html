@@ -9,7 +9,7 @@
     showModal: false, 
     isEdit: false, 
     imagePreview: null,
-    form: { id: '', title: '', subtitle: '', category: '{{ kategori_halaman }}', description: '', status: 'Publish', currentImage: '' } 
+    form: { id: '', title: '', subtitle: '', category: '', description: '', status: 'Publish', currentImage: '', time: '', performer: '', price: '', location: '' } 
 }">
 
     <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
@@ -18,60 +18,147 @@
             <h2 class="text-3xl font-luxury font-bold text-brown-900">{{ judul_halaman }}</h2>
         </div>
         
-        <button @click="showModal = true; isEdit = false; imagePreview = null; form = { id:'', title:'', subtitle:'', category:'{{ kategori_halaman }}', description:'', status:'Publish', currentImage:'' }" 
+        <button @click="showModal = true; isEdit = false; imagePreview = null; form = { id:'', title:'', subtitle:'', category:'', description:'', status:'Publish', currentImage:'', time:'', performer:'', price:'', location:'' }" 
             class="px-6 py-2 bg-white text-brown-800 border border-gold-400/30 rounded-full text-sm font-bold shadow-sm hover:bg-gold-100 transition flex items-center gap-2">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-            Tambah {{ kategori_halaman }}
+            Tambah Jadwal
         </button>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"> 
-        {% for content in contents %}
-        <div class="group relative bg-white rounded-2xl shadow-glass overflow-hidden border border-white hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col h-full">
-            <div class="h-48 w-full relative overflow-hidden bg-gray-100">
-                <img src="{{ content.image_url }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="{{ content.title }}">
-                <div class="absolute top-3 right-3">
-                     <span class="px-3 py-1 bg-gold-500 text-white text-[10px] font-bold uppercase tracking-widest rounded shadow-md">{{ content.category }}</span>
-                </div>
-            </div>
-            
-            <div class="p-6 flex-1 flex flex-col">
-                <div class="mb-4">
-                    <div class="flex items-center gap-2 text-gold-600 mb-2 bg-gold-50 w-fit px-3 py-1 rounded-lg border border-gold-200/50">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                        <p class="text-xs font-bold uppercase truncate tracking-wide">{{ content.subtitle }}</p>
-                    </div>
-                    <h3 class="text-xl font-bold text-brown-900 leading-tight">{{ content.title }}</h3>
-                </div>
-                
-                <div class="text-sm text-gray-500 mb-6 flex-1">
-                    <div class="flex items-start gap-2 mb-2">
-                        <svg class="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        <p class="line-clamp-3">{{ content.description }}</p>
-                    </div>
-                </div>
-                
-                <div class="pt-4 border-t border-gray-100 flex justify-between items-center">
-                    <button @click="showModal = true; isEdit = true; imagePreview = '{{ content.image_url }}'; form = { id: '{{ content.id }}', title: `{{ content.title }}`, subtitle: `{{ content.subtitle }}`, category: '{{ content.category }}', description: `{{ content.description }}`, status: '{{ content.status }}', currentImage: '{{ content.image_url }}' }"
-                        class="text-xs font-bold text-gold-600 hover:text-brown-800 uppercase tracking-wider flex items-center gap-1">
-                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
-                        Edit Jadwal
-                    </button>
-                    <a href="/delete/{{ content.id }}" onclick="return confirm('Hapus event ini?')" class="text-gray-400 hover:text-red-500 transition p-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                    </a>
-                </div>
-            </div>
+    <div class="bg-white rounded-3xl p-6 shadow-glass border border-gold-400/20 w-full relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-gold-100/30 rounded-full blur-3xl -z-10 translate-x-1/2 -translate-y-1/2"></div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="text-left text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100 whitespace-nowrap">
+                        <th class="pb-4 pl-4">Event</th>
+                        <th class="pb-4 px-2">Lokasi</th>     <th class="pb-4 px-2">Tanggal</th>
+                        <th class="pb-4 px-2">Jam</th>
+                        <th class="pb-4 px-2">Dalang</th>
+                        <th class="pb-4 px-2">Tiket</th>
+                        <th class="pb-4 px-2">Kategori</th>
+                        <th class="pb-4 px-2">Status</th>
+                        <th class="pb-4 text-right pr-4">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm">
+                    {% for content in contents %}
+                    <tr class="group hover:bg-gold-50/30 transition-all duration-300 rounded-xl border-b border-gray-50 last:border-0">
+                        
+                        <td class="py-4 pl-4 min-w-[250px]">
+                            <div class="flex items-center gap-3">
+                                <div class="h-12 w-12 rounded-xl bg-gray-200 overflow-hidden shadow-sm border border-gray-100 flex-shrink-0 group-hover:scale-105 transition-transform">
+                                    <img src="{{ content.image_url }}" class="w-full h-full object-cover" alt="{{ content.title }}">
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-brown-900 text-base line-clamp-1">{{ content.title }}</h4>
+                                    <p class="text-[10px] text-gray-500 line-clamp-1 max-w-[200px]">{{ content.description }}</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-2 text-gray-600 font-medium whitespace-nowrap">
+                            {% if content.location %}
+                                <div class="flex items-center gap-1">
+                                    <svg class="w-3 h-3 text-gold-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                    {{ content.location }}
+                                </div>
+                            {% else %}
+                                <span class="text-xs text-gray-300">-</span>
+                            {% endif %}
+                        </td>
+                        
+                        <td class="py-4 px-2 text-gray-600 font-medium whitespace-nowrap">
+                            <div class="flex items-center gap-1">
+                                <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                {{ content.subtitle }} 
+                            </div>
+                        </td>
+
+                        <td class="py-4 px-2 text-gray-500 whitespace-nowrap">
+                            {% if content.time %}
+                            <div class="flex items-center gap-1 text-xs">
+                                <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                {{ content.time }} WIB
+                            </div>
+                            {% else %}
+                                <span class="text-xs text-gray-300">-</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="py-4 px-2 whitespace-nowrap">
+                            {% if content.performer %}
+                                <div class="flex items-center gap-1 text-xs font-bold text-brown-800">
+                                    <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    {{ content.performer }}
+                                </div>
+                            {% else %}
+                                <span class="text-gray-300 text-xs">-</span>
+                            {% endif %}
+                        </td>
+
+                        <td class="py-4 px-2 whitespace-nowrap">
+                             {% if content.price %}
+                             <span class="inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold bg-green-50 text-green-700 border border-green-100">
+                                 Rp {{ content.price }}
+                             </span>
+                             {% else %}
+                                <span class="text-gray-400 text-xs italic">Gratis</span>
+                             {% endif %}
+                        </td>
+
+                        <td class="py-4 px-2 whitespace-nowrap">
+                             <span class="px-2 py-1 rounded-md bg-gold-100 text-[10px] text-gold-700 font-bold uppercase tracking-wider border border-gold-200">
+                                {{ content.category }}
+                             </span>
+                        </td>
+
+                        <td class="py-4 px-2 whitespace-nowrap">
+                            {% if content.status == 'Publish' %}
+                                <div class="flex items-center text-green-600 font-bold text-xs">
+                                    <span class="relative flex h-2 w-2 mr-2">
+                                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                      <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                                    </span>
+                                    Open
+                                </div>
+                            {% else %}
+                                <div class="flex items-center text-gray-400 font-bold text-xs">
+                                    <span class="w-2 h-2 bg-gray-400 rounded-full mr-2"></span>
+                                    Selesai
+                                </div>
+                            {% endif %}
+                        </td>
+
+                        <td class="py-4 pr-4 text-right">
+                             <div class="flex items-center justify-end gap-2">
+                                <button @click="showModal = true; isEdit = true; imagePreview = '{{ content.image_url }}'; form = { id: '{{ content.id }}', title: `{{ content.title }}`, subtitle: `{{ content.subtitle }}`, category: '{{ content.category }}', description: `{{ content.description }}`, status: '{{ content.status }}', currentImage: '{{ content.image_url }}', time: '{{ content.time }}', performer: '{{ content.performer }}', price: '{{ content.price }}', location: '{{ content.location }}' }" 
+                                    class="p-2 rounded-lg bg-gold-50 hover:bg-gold-100 text-gold-600 border border-gold-200/50 transition shadow-sm" title="Edit">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                </button>
+                                <a href="/delete/{{ content.id }}" onclick="return confirm('Hapus jadwal ini?')" class="p-2 rounded-lg bg-gray-50 hover:bg-red-50 text-gray-400 hover:text-red-500 border border-gray-100 transition shadow-sm" title="Hapus">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="9" class="text-center py-10">
+                            <div class="flex flex-col items-center justify-center text-gray-400">
+                                 <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-3">
+                                    <svg class="w-8 h-8 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                </div>
+                                <span class="font-luxury text-lg text-brown-900">Belum Ada Jadwal</span>
+                                <span class="text-xs mt-1">Silakan tambahkan event pagelaran baru.</span>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-        {% else %}
-        <div class="col-span-full py-20 text-center">
-            <div class="inline-block p-4 rounded-full bg-gold-100/50 mb-4">
-                <svg class="w-10 h-10 text-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-            </div>
-            <h3 class="font-luxury text-xl text-brown-900">Belum Ada Agenda</h3>
-            <p class="text-gray-500 mt-2">Jadwal {{ kategori_halaman }} belum ditambahkan.</p>
-        </div>
-        {% endfor %}
     </div>
 
     <div x-show="showModal" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-brown-900/60 backdrop-blur-sm"
@@ -90,7 +177,7 @@
                     <input type="hidden" name="id" x-model="form.id">
 
                     <div class="mb-4">
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Poster / Flyer</label>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Poster / Flyer (Max 1MB)</label>
                         <div class="flex items-start gap-4">
                             <div class="w-24 h-24 rounded-xl bg-gray-100 border border-dashed border-gray-300 flex items-center justify-center overflow-hidden flex-shrink-0 relative group">
                                 <template x-if="imagePreview"><img :src="imagePreview" class="w-full h-full object-cover"></template>
@@ -105,29 +192,42 @@
 
                     <div class="grid grid-cols-2 gap-4">
                         <div class="col-span-2">
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nama Acara (Title)</label>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nama Acara</label>
                             <input type="text" name="title" x-model="form.title" required class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-bold text-brown-900" placeholder="Contoh: Festival Dalang Cilik">
                         </div>
                         
                         <div>
                             <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Kategori</label>
-                            <input type="text" name="category" x-model="form.category" readonly class="w-full px-4 py-3 bg-gray-200 text-gray-600 rounded-xl border-transparent cursor-not-allowed font-bold">
+                            <input type="text" name="category" x-model="form.category" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-bold text-brown-900" placeholder="Wayang Kulit">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Nama Dalang</label>
+                            <input type="text" name="performer" x-model="form.performer" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-bold text-brown-900" placeholder="Ki Seno Nugroho">
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tanggal & Waktu</label>
-                            <div class="relative">
-                                <input type="text" name="subtitle" x-model="form.subtitle" class="w-full px-4 py-3 pl-10 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-medium" placeholder="10 Okt 2024, 19:00 WIB">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                </div>
-                            </div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tanggal</label>
+                            <input type="date" name="subtitle" x-model="form.subtitle" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-medium">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Jam (WIB)</label>
+                            <input type="time" name="time" x-model="form.time" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-medium">
+                        </div>
+
+                        <div class="col-span-2">
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Lokasi Acara</label>
+                            <input type="text" name="location" x-model="form.location" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-medium" placeholder="Contoh: Alun-alun Kidul Yogyakarta">
+                        </div>
+
+                        <div class="col-span-2">
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Harga Tiket (Opsional)</label>
+                            <input type="text" name="price" x-model="form.price" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-medium" placeholder="Contoh: 15.000 (Kosongkan jika Gratis)">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Lokasi & Detail Acara</label>
-                        <textarea name="description" x-model="form.description" rows="3" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-medium" placeholder="Alun-alun Kidul, Tiket Masuk Gratis..."></textarea>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tentang Acara / Deskripsi (Opsional)</label>
+                        <textarea name="description" x-model="form.description" rows="3" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-medium" placeholder="Informasi tambahan tentang acara..."></textarea>
                     </div>
 
                     <div>

@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{# --- KONFIGURASI HALAMAN --- #}
+{% set kategori_halaman = 'Video' %} 
+{% set judul_halaman = 'Galeri & Dokumenter' %}
+
+<div x-data="{ 
+    showModal: false, 
+    isEdit: false, 
+    imagePreview: null,
+    form: { id: '', title: '', subtitle: '', category: '', description: '', status: 'Publish', video_url: '', currentImage: '' } 
+}">
+
+    <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+        <div>
+            <p class="text-brown-800 text-xs font-bold tracking-widest uppercase mb-1">Arsip Digital</p>
+            <h2 class="text-3xl font-luxury font-bold text-brown-900">{{ judul_halaman }}</h2>
+        </div>
+        
+        <button @click="showModal = true; isEdit = false; imagePreview = null; form = { id:'', title:'', subtitle:'', category:'', description:'', status:'Publish', video_url:'', currentImage:'' }" 
+            class="px-6 py-2 bg-white text-brown-800 border border-gold-400/30 rounded-full text-sm font-bold shadow-sm hover:bg-gold-100 transition flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            Tambah {{ kategori_halaman }}
+        </button>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8"> 
+        {% for content in contents %}
+        <div class="group relative bg-white rounded-2xl shadow-glass overflow-hidden border border-white hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col h-full">
+            <div class="h-48 w-full relative overflow-hidden bg-gray-900 group">
+                <img src="{{ content.image_url }}" class="w-full h-full object-cover opacity-80 transition-transform duration-700 group-hover:scale-110 group-hover:opacity-60" alt="{{ content.title }}">
+                
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-12 h-12 bg-gold-400/80 rounded-full flex items-center justify-center backdrop-blur-sm shadow-gold-glow group-hover:scale-110 transition duration-300">
+                        <svg class="w-5 h-5 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+
+                <div class="absolute top-3 right-3">
+                     <span class="px-3 py-1 bg-red-600 text-white text-[10px] font-bold uppercase tracking-widest rounded shadow-md flex items-center gap-1">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Video
+                     </span>
+                </div>
+            </div>
+            
+            <div class="p-6 flex-1 flex flex-col">
+                <div class="mb-4">
+                    <p class="text-xs font-bold text-gold-600 uppercase mb-1 tracking-wider">{{ content.subtitle }}</p>
+                    <h3 class="text-xl font-bold text-brown-900 leading-tight line-clamp-2">{{ content.title }}</h3>
+                </div>
+                
+                <div class="text-sm text-gray-500 mb-6 flex-1">
+                    <p class="line-clamp-3">{{ content.description }}</p>
+                    
+                    {% if content.video_url %}
+                    <a href="{{ content.video_url }}" target="_blank" class="inline-flex items-center gap-2 mt-3 text-xs font-bold text-blue-600 hover:text-blue-800">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        Tonton Video Upload
+                    </a>
+                    {% endif %}
+                </div>
+                
+                <div class="pt-4 border-t border-gray-100 flex justify-between items-center">
+                    <button @click="showModal = true; isEdit = true; imagePreview = '{{ content.image_url }}'; form = { id: '{{ content.id }}', title: `{{ content.title }}`, subtitle: `{{ content.subtitle }}`, category: '{{ content.category }}', description: `{{ content.description }}`, video_url: `{{ content.video_url }}`, status: '{{ content.status }}', currentImage: '{{ content.image_url }}' }"
+                        class="text-xs font-bold text-gold-600 hover:text-brown-800 uppercase tracking-wider flex items-center gap-1">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        Edit
+                    </button>
+                    <a href="/delete/{{ content.id }}" onclick="return confirm('Hapus video ini?')" class="text-gray-400 hover:text-red-500 transition p-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-span-full py-20 text-center">
+            <div class="inline-block p-4 rounded-full bg-gold-100/50 mb-4">
+                <svg class="w-10 h-10 text-gold-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+            </div>
+            <h3 class="font-luxury text-xl text-brown-900">Galeri Kosong</h3>
+            <p class="text-gray-500 mt-2">Belum ada video dokumentasi yang ditambahkan.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div x-show="showModal" style="display: none;" class="fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-brown-900/60 backdrop-blur-sm"
+         x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0">
+        
+        <div class="relative bg-white rounded-3xl shadow-2xl w-full max-w-lg mx-4 border border-gold-400/20 overflow-hidden" @click.away="showModal = false">
+             <div class="h-2 bg-gold-gradient w-full"></div>
+             <div class="p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-luxury font-bold text-brown-900"><span x-text="isEdit ? 'Edit Video' : 'Tambah Video'"></span></h3>
+                    <button @click="showModal = false" class="text-gray-400 hover:text-red-500 transition">✕</button>
+                </div>
+
+                <form action="/save" method="POST" enctype="multipart/form-data" class="space-y-4">
+                    <input type="hidden" name="id" x-model="form.id">
+
+                    <div class="mb-4">
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-2">Upload File Video</label>
+                        <div class="relative">
+                             <input type="file" name="video" accept="video/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-3 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-gold-100 file:text-gold-700 hover:file:bg-gold-200 cursor-pointer bg-gray-50 rounded-xl border-transparent"/>
+                             <p class="text-[10px] text-gray-400 mt-1 ml-1" x-show="form.video_url && isEdit">File video sudah ada. Upload baru untuk mengganti.</p>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Judul Video</label>
+                        <input type="text" name="title" x-model="form.title" required class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-bold text-brown-900" placeholder="Judul Dokumentasi">
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Kategori</label>
+                            <input type="text" name="category" x-model="form.category" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-bold text-brown-900" placeholder="Contoh: Dokumenter / Pentas">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Durasi / Sumber</label>
+                            <input type="text" name="subtitle" x-model="form.subtitle" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-medium" placeholder="Contoh: 15 Menit">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Deskripsi Singkat</label>
+                        <textarea name="description" x-model="form.description" rows="2" class="w-full px-4 py-3 bg-gray-50 rounded-xl border-transparent focus:bg-white focus:border-gold-400 focus:ring-0 transition font-medium"></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Status</label>
+                        <div class="flex space-x-4">
+                            <label class="flex items-center cursor-pointer"><input type="radio" name="status" value="Publish" x-model="form.status" class="text-gold-500 focus:ring-gold-400"><span class="ml-2 text-sm font-bold text-gray-600">Publish</span></label>
+                            <label class="flex items-center cursor-pointer"><input type="radio" name="status" value="Draft" x-model="form.status" class="text-gray-400 focus:ring-gray-400"><span class="ml-2 text-sm font-bold text-gray-400">Draft</span></label>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex justify-end gap-3">
+                        <button type="button" @click="showModal = false" class="px-6 py-3 rounded-xl text-gray-500 font-bold hover:bg-gray-100 transition">Batal</button>
+                        <button type="submit" class="px-8 py-3 rounded-xl bg-gold-gradient text-white font-bold shadow-lg hover:shadow-gold-glow hover:-translate-y-1 transition transform">Simpan</button>
+                    </div>
+                </form>
+             </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -3,104 +3,170 @@
 {% block content %}
 <div class="mb-8 flex justify-between items-end">
     <div>
-        <p class="text-brown-800 text-sm font-bold tracking-widest uppercase mb-1">Overview</p>
+        <p class="text-brown-800 text-sm font-bold tracking-widest uppercase mb-1">Overview Dashboard</p>
         <h2 class="text-4xl font-luxury font-bold text-brown-900">
-            Monitor <span class="text-gradient-gold">Database</span>
+            Daftar <span class="text-transparent bg-clip-text bg-gold-gradient">Pengguna & Aktivitas</span>
         </h2>
-        <p class="text-gray-500 mt-2 text-sm">Ringkasan seluruh data budaya (Read-Only).</p>
+        <p class="text-gray-500 mt-2 text-sm">Pantau statistik pengguna, XP, dan ulasan terbaru.</p>
     </div>
-    
-    <div class="hidden md:flex space-x-4">
-        <div class="px-5 py-2 bg-white rounded-lg shadow-sm border border-gold-100 flex items-center">
-            <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-            <span class="text-xs font-bold text-brown-800">System Online</span>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gold-200/50 flex items-center justify-between relative overflow-hidden group hover:shadow-gold-glow/20 transition duration-300">
+        <div class="absolute right-0 top-0 w-24 h-24 bg-gold-100 rounded-bl-full -mr-4 -mt-4 transition group-hover:scale-110"></div>
+        <div>
+            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Total Pengguna</p>
+            <h3 class="text-3xl font-luxury font-bold text-brown-900 mt-1">{{ total_users }}</h3>
+        </div>
+        <div class="w-12 h-12 bg-gold-50 rounded-xl flex items-center justify-center text-gold-600 z-10 border border-gold-100">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gold-200/50 flex items-center justify-between relative overflow-hidden group hover:shadow-gold-glow/20 transition duration-300">
+        <div class="absolute right-0 top-0 w-24 h-24 bg-blue-50 rounded-bl-full -mr-4 -mt-4 transition group-hover:scale-110"></div>
+        <div>
+            <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Total Seluruh XP</p>
+            <h3 class="text-3xl font-luxury font-bold text-brown-900 mt-1">{{ total_xp }}</h3>
+        </div>
+        <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 z-10 border border-blue-100">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 3.214L13 21l-2.286-6.857L5 12l5.714-3.214L13 3z"></path></svg>
         </div>
     </div>
 </div>
 
-<div class="bg-white/60 backdrop-blur-md rounded-3xl p-6 shadow-glass border border-white w-full">
+<div class="bg-white rounded-3xl p-6 shadow-glass border border-gold-400/20 w-full relative overflow-hidden mb-8" x-data="{ searchQuery: '' }">
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+        <h3 class="font-luxury text-lg text-brown-900 font-bold">Top Leaderboard Pengguna</h3>
+        <div class="relative w-full sm:w-64">
+            <input type="text" x-model="searchQuery" placeholder="Cari user..." class="w-full pl-10 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:border-gold-400 focus:ring-0 transition">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></div>
+        </div>
+    </div>
+
     <div class="overflow-x-auto">
         <table class="w-full">
             <thead>
-                <tr class="text-left text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-200">
-                    <th class="pb-4 pl-4">Item & Visual</th>
-                    <th class="pb-4">Kategori</th>
-                    <th class="pb-4">Status</th>
-                    <th class="pb-4 text-right pr-4">Aksi</th>
+                <tr class="text-left text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">
+                    <th class="pb-4 pl-4 w-1/3">User</th>
+                    <th class="pb-4 w-1/3">Email</th>
+                    <th class="pb-4 pr-4 w-1/3 text-right">Total XP</th>
                 </tr>
             </thead>
             <tbody class="text-sm">
-                {% for content in contents %}
-                <tr class="group hover:bg-white transition-all duration-300 rounded-xl border-b border-transparent hover:shadow-lg">
-                    
-                    <td class="py-4 pl-4 rounded-l-xl">
-                        <div class="flex items-center">
-                            <div class="h-14 w-14 rounded-xl bg-gray-200 overflow-hidden mr-4 shadow-md border border-white flex-shrink-0">
-                                {% if content.image_url %}
-                                    <img src="{{ content.image_url }}" alt="Img" class="w-full h-full object-cover">
-                                {% else %}
-                                    <div class="w-full h-full bg-brown-100 flex items-center justify-center text-brown-400">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                    </div>
-                                {% endif %}
+                {% for user in users %}
+                <tr class="group hover:bg-gold-50/30 transition-all duration-300 rounded-xl border-b border-gray-50 last:border-0" x-show="!searchQuery || $el.innerText.toLowerCase().includes(searchQuery.toLowerCase())">
+                    <td class="py-4 pl-4">
+                        <div class="flex items-center gap-3">
+                            <div class="relative">
+                                <img src="https://ui-avatars.com/api/?name={{ user.name | urlencode }}&background=random&color=fff" class="w-10 h-10 rounded-full border border-gray-200">
+                                {% if loop.index == 1 %}<span class="absolute -top-1 -right-1 text-base">🥇</span>{% endif %}
+                                {% if loop.index == 2 %}<span class="absolute -top-1 -right-1 text-base">🥈</span>{% endif %}
+                                {% if loop.index == 3 %}<span class="absolute -top-1 -right-1 text-base">🥉</span>{% endif %}
                             </div>
-                            
-                            <div>
-                                <p class="font-bold text-brown-900 text-base line-clamp-1">{{ content.title }}</p>
-                                <p class="text-xs text-gray-500 font-medium">{{ content.subtitle }}</p>
-                            </div>
+                            <span class="block font-bold text-brown-900">{{ user.name }}</span>
                         </div>
                     </td>
-
-                    <td class="py-4">
-                        <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide border 
-                            {% if content.category == 'Kisah' %} bg-brown-50 text-brown-700 border-brown-200
-                            {% elif content.category == 'Museum' %} bg-purple-50 text-purple-700 border-purple-100
-                            {% elif content.category == 'Event' %} bg-blue-50 text-blue-700 border-blue-100
-                            {% else %} bg-gold-100 text-yellow-800 border-gold-200 {% endif %}">
-                            {{ content.category }}
-                        </span>
-                    </td>
-
-                    <td class="py-4">
-                        {% if content.status == 'Publish' %}
-                            <div class="flex items-center text-green-600 font-bold text-xs">
-                                <span class="relative flex h-2 w-2 mr-2">
-                                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                  <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                                </span>
-                                Live
-                            </div>
-                        {% else %}
-                            <div class="flex items-center text-gray-400 font-bold text-xs">
-                                <span class="w-2 h-2 bg-gray-400 rounded-full mr-2"></span>
-                                Draft
-                            </div>
-                        {% endif %}
-                    </td>
-
-                    <td class="py-4 pr-4 text-right rounded-r-xl">
-                        <a href="/delete/{{ content.id }}" onclick="return confirm('Hapus permanen data ini?')" 
-                           class="w-8 h-8 rounded-full bg-gray-50 hover:bg-red-50 text-gray-400 hover:text-red-500 flex items-center justify-center transition ml-auto" title="Hapus">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                        </a>
+                    <td class="py-4 text-gray-500">{{ user.email }}</td>
+                    <td class="py-4 pr-4 text-right">
+                        <div class="flex items-center justify-end gap-2">
+                            {% if loop.index == 1 %}<span class="px-2 py-0.5 rounded-full bg-gold-100 text-[10px] text-gold-600 font-bold uppercase border border-gold-200">Juara 1</span>{% endif %}
+                            <span class="font-bold text-gold-600 text-lg">{{ "{:,.0f}".format(user.xp) }} XP</span>
+                        </div>
                     </td>
                 </tr>
                 {% else %}
-                <tr>
-                    <td colspan="4" class="text-center py-12">
-                        <div class="flex flex-col items-center justify-center text-gray-400">
-                            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-3">
-                                <svg class="w-8 h-8 opacity-40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            </div>
-                            <span class="font-luxury text-lg text-brown-900">Database Kosong</span>
-                            <span class="text-xs mt-1">Gunakan menu di samping untuk mulai mengisi konten.</span>
-                        </div>
-                    </td>
-                </tr>
+                <tr><td colspan="3" class="text-center py-8 text-gray-400">Belum ada data pengguna.</td></tr>
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+</div>
+
+<div class="bg-white rounded-3xl p-6 shadow-glass border border-gold-400/20 w-full relative overflow-hidden" 
+     x-data="{ activeFilter: 'all' }"> 
+
+    <div class="flex flex-col sm:flex-row justify-between items-center mb-6 border-b border-gray-100 pb-4 gap-4">
+        <div>
+            <h3 class="font-luxury text-lg text-brown-900 font-bold">Ulasan & Rating Terbaru</h3>
+            <p class="text-xs text-gray-500 mt-1">Aktivitas komentar pengguna pada koleksi.</p>
+        </div>
+        
+        <div class="flex p-1 bg-gray-100 rounded-xl">
+            <button @click="activeFilter = 'all'" 
+                :class="activeFilter === 'all' ? 'bg-white text-brown-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+                class="px-4 py-2 text-xs font-bold rounded-lg transition-all">
+                Semua
+            </button>
+            <button @click="activeFilter = 'event'" 
+                :class="activeFilter === 'event' ? 'bg-white text-green-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+                class="px-4 py-2 text-xs font-bold rounded-lg transition-all">
+                Event
+            </button>
+            <button @click="activeFilter = 'museum'" 
+                :class="activeFilter === 'museum' ? 'bg-white text-gold-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+                class="px-4 py-2 text-xs font-bold rounded-lg transition-all">
+                Museum
+            </button>
+            <button @click="activeFilter = 'kisah'" 
+                :class="activeFilter === 'kisah' ? 'bg-white text-blue-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+                class="px-4 py-2 text-xs font-bold rounded-lg transition-all">
+                Kisah
+            </button>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        
+        {% for comment in comments %}
+        <div x-show="activeFilter === 'all' || activeFilter === '{{ comment.type_lower }}'" x-transition 
+             class="p-5 bg-gray-50 rounded-2xl border border-gray-100 hover:border-gold-300 hover:shadow-md transition duration-300 group">
+            
+            <div class="flex justify-between items-start mb-3">
+                <div class="flex items-center gap-3">
+                    <img src="https://ui-avatars.com/api/?name={{ comment.user_name | urlencode }}&background=random" class="w-10 h-10 rounded-full border border-white shadow-sm">
+                    <div>
+                        <p class="text-sm font-bold text-brown-900 line-clamp-1">{{ comment.user_name }}</p>
+                        <div class="flex text-yellow-400 text-xs mt-0.5">
+                            {% for i in range(comment.rating) %}★{% endfor %}
+                            {% for i in range(5 - comment.rating) %}<span class="text-gray-300">★</span>{% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <span class="text-[10px] text-gray-400 bg-white px-2 py-1 rounded-full border border-gray-100 whitespace-nowrap">{{ comment.time_ago }}</span>
+            </div>
+            
+            <div class="relative min-h-[40px]">
+                <p class="text-sm text-gray-600 italic pl-4 border-l-2 
+                    {% if comment.type_lower == 'event' %} border-green-300
+                    {% elif comment.type_lower == 'museum' %} border-gold-300
+                    {% elif comment.type_lower == 'kisah' %} border-blue-300
+                    {% else %} border-gray-300 {% endif %}
+                    line-clamp-2">
+                    "{{ comment.text }}"
+                </p>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-gray-200 flex items-center justify-between">
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Konten:</span>
+                
+                {% if comment.type_lower == 'event' %}
+                    <span class="text-xs font-bold text-green-700 bg-green-100 px-3 py-1 rounded-lg truncate max-w-[150px]">{{ comment.content_title }}</span>
+                {% elif comment.type_lower == 'museum' %}
+                    <span class="text-xs font-bold text-gold-700 bg-gold-100 px-3 py-1 rounded-lg truncate max-w-[150px]">{{ comment.content_title }}</span>
+                {% elif comment.type_lower == 'kisah' %}
+                    <span class="text-xs font-bold text-blue-700 bg-blue-100 px-3 py-1 rounded-lg truncate max-w-[150px]">{{ comment.content_title }}</span>
+                {% else %}
+                    <span class="text-xs font-bold text-gray-700 bg-gray-100 px-3 py-1 rounded-lg truncate max-w-[150px]">{{ comment.content_title }}</span>
+                {% endif %}
+            </div>
+        </div>
+        {% else %}
+        <div class="col-span-full py-10 text-center text-gray-400 italic">
+            Belum ada ulasan yang masuk.
+        </div>
+        {% endfor %}
+
     </div>
 </div>
 {% endblock %}
